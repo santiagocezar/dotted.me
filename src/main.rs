@@ -3,11 +3,12 @@ converts 1 2 3 4 5 6 7 8
     into 8 7 6 4 2 5 3 1
 */
 
-use clap::Clap;
+
+use libdotted::dotted;
 use image::open;
+use clap::Clap;
 
 mod canvas;
-use canvas::Canvas;
 #[derive(Debug, Clap)]
 
 #[clap(name = "dotted.me")]
@@ -31,33 +32,20 @@ struct Opt {
     
     /// Archivo de imagen
     #[clap()]
-    image: String,
+    image: std::path::PathBuf,
 }
 
 fn main() -> Result<(), std::io::Error> {
     let opt: Opt = Opt::parse();
-    let _img = match open(opt.image) {
+    let img = match open(opt.image) {
         Ok(img) => img,
         Err(e) => {
             println!("Error al cargar la imagen: {}", e.to_string());
-            return Err(std::io::ErrorKind::InvalidInput.into());
+            return Err(std::io::ErrorKind::InvalidInput.into())
         }
     };
-    let _img = _img.grayscale();
-    let _img = _img.resize(opt.width, std::u32::MAX, image::imageops::Nearest);
-    let img = _img.into_rgba();
-
-    let width = img.width() as usize;
-    let height = img.height() as usize;
     
-    let mut c = Canvas::new(width, height);
-
-    let mut i = 0;
-    for p in img.pixels() {
-        c.set(opt.invert ^ (p[0] < opt.level), (i % width) as usize, (i / height) as usize);
-        i+=1;
-    }
-
-    println!("{}", c.draw());
+    let dots = dotted(img, opt.level, opt.width, opt.invert);
+    println!("{}", dots);
     Ok(())
 }

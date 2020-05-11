@@ -1,3 +1,4 @@
+#[allow(dead_code)]
 fn b2b(dots: u16) -> u16 {
     0
     | ((dots & 0b10000000 > 0) as u16) << 0
@@ -18,6 +19,7 @@ pub struct Canvas {
     pub dot_height: usize,
     pub _buffer: Vec<u16>,
 }
+#[allow(dead_code)]
 impl Canvas {
     pub fn new(width: usize, height: usize) -> Self {
         let w = width as f32;
