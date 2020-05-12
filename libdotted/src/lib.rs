@@ -18,6 +18,21 @@ pub fn dotted(img: DynamicImage, level: u8, width: u32, invert: bool) -> String 
         c.set(invert ^ (p[0] < level), (i % width) as usize, (i / height) as usize);
         i+=1;
     }
+    
 
     c.draw()
+}
+
+use wasm_bindgen::prelude::*;
+
+#[wasm_bindgen]
+extern "C" {
+    fn alert(s: &str);
+}
+
+#[wasm_bindgen]
+pub fn wadotted(pixels: &JsValue, w: u32, h: u32, level: u8, x_dots: u32, invert: bool) {
+    let pixel_vec: Vec<u8> = pixels.into_serde().unwrap();
+    let img = image::RgbImage::from_raw(w, h, pixel_vec).unwrap();
+    dotted(DynamicImage::ImageRgb8(img), level, x_dots, invert);
 }

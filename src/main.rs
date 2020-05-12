@@ -8,7 +8,6 @@ use libdotted::dotted;
 use image::open;
 use clap::Clap;
 
-mod canvas;
 #[derive(Debug, Clap)]
 
 #[clap(name = "dotted.me")]

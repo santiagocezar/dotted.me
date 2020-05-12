@@ -9,3 +9,9 @@ edition = "2018"
 [dependencies]
 libdotted = {path = "libdotted/"}
 clap = {version = "3.0.0-beta.1", optional = true}
+
+[workspace]
+
+members = [
+    "libdotted"
+]
